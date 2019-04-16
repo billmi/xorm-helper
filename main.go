@@ -41,4 +41,17 @@ func main() {
 	if len(po) > 0{
 		fmt.Print(pageListInfo)    //result : map[string]interface{} 请阅读源码
 	}
+
+	fmt.Print("\r\n ========== condition Build \r\n")
+
+	//condition Build  后面可以自己扩展
+	var condi = make(map[string]map[string]interface{})
+	var inCodi = make(map[string]interface{})
+	var like = make(map[string]interface{})
+	like["name"] = "Bill"
+	inCodi["type"] = 1
+	inCodi["title"] = "Bill"
+	condi["AND"] = inCodi
+	condi["LIKE"] = like
+	fmt.Print(ListHelper.ConditionBuild(condi))
 }
