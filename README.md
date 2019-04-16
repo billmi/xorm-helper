@@ -1,6 +1,6 @@
 本包支持go-xorm数据引擎分页
 
-##### 1. 获取xorm引擎 1. 获取xorm引擎
+##### 1. 获取xorm引擎
 `
 go get -u -v github.com/go-xorm/xorm
 `
