@@ -1,18 +1,18 @@
-本包支持go-xorm数据引擎分页
+baseFrom : go-xorm engine
 
-##### 1. 获取xorm引擎
+##### 1. get xorm
 `
 go get -u -v github.com/go-xorm/xorm
 `
 
-#####  2. 获取mysql驱动
+#####  2. get mysql device
 `
 go get -u -v github.com/go-sql-driver/mysql
 `
 
-#####  3. 导入test.sql到数据库
+#####  3. import test.sql to database
 
-##### 主体代码
+##### MAIN
 
 ```
 package main
@@ -56,12 +56,12 @@ func main() {
 	var po1 = []*DeviceOauthLogPo{}
 	var pageListInfo = ListHelper.GetPageLists(&po1,"`test`","`id`","","`id` DESC",0,2)
 	if len(po) > 0{
-		fmt.Print(pageListInfo)    //result : map[string]interface{} 请阅读源码
+		fmt.Print(pageListInfo)    //result : map[string]interface{}【 You can edit in it ! 】
 	}
 
 	fmt.Print("\r\n ========== condition Build \r\n")
 
-	//condition Build  后面可以自己扩展
+	//condition Build  【Can add by yourself !】
 	var condi = make(map[string]map[string]interface{})
 	var inCodi = make(map[string]interface{})
 	var like = make(map[string]interface{})
