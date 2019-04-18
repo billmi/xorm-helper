@@ -4,7 +4,7 @@ import (
 	"github.com/go-xorm/xorm"
 	_ "github.com/go-sql-driver/mysql"
 	"fmt"
-	"bill/src/pagenation"
+	"xorm-pagenation/src/pagenation"
 )
 
 //po base database => xorm
