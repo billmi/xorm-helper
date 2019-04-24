@@ -13,10 +13,14 @@ const(
 
 
 
-func QueryBuild(querySql string,currPage int,usePage bool) string{
+func QueryBuild(querySql string,currPage int,listRows int,usePage bool) string{
 	var sql string
+	var _listRows = ListRow
 	if usePage == true{
-		sql = querySql + PagenationParse(currPage,ListRow)
+		if listRows > 0{
+			_listRows = listRows
+		}
+		sql = querySql + PagenationParse(currPage,_listRows)
 	}
 	return sql
 }

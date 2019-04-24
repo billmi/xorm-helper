@@ -3,6 +3,7 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"xorm-pagenation/src/pagenation"
 	"fmt"
 )
 
@@ -21,6 +22,15 @@ type DeviceOauthLogPo struct {
 	DeviceScreenHeight int    `json:"device_screen_height"`
 }
 
+type DeviceOauthLogPo1 struct {
+	DeviceType         int    `json:"device_type"`
+	DeviceTypeName     string `json:"device_type_name"`
+	DeviceTypeTitle    string `json:"device_type_title"`
+	DeviceScreenWidth  int    `json:"device_screen_width"`
+	DeviceScreenHeight int    `json:"device_screen_height"`
+	Title              string `json:"title"`
+}
+
 func main() {
 	engine, err := xorm.NewEngine( "mysql",
 		"root" + ":" + "root" + "@tcp("+"127.0.0.1"+":"+ "3306" +")/"+ "bill"+"?charset=utf8",
@@ -28,10 +38,10 @@ func main() {
 	if err != nil{
 		fmt.Print(err.Error())
 	}
-	var ListHelper = pagenation.DaoBase{}
-	ListHelper.SetDatasource(engine)
+	var PageHelper = pagenation.DaoBase{}
+	PageHelper.SetDatasource(engine)
 	var po = []*DeviceOauthLogPo{}
-	ListHelper.GetLists(&po,"`test`","`id`","","`id` DESC")
+	PageHelper.GetLists(&po,"`test`","`id`","","`id` DESC")
 	if len(po) > 0{
 		for _,row := range po{
 			fmt.Print(row.DeviceTypeName)
@@ -41,11 +51,19 @@ func main() {
 		}
 	}
 
-	var po1 = []*DeviceOauthLogPo{}
-	var pageListInfo = ListHelper.GetPageLists(&po1,"`test`","`id`","","`id` DESC",0,2)
-	if len(po) > 0{
-		fmt.Print(pageListInfo)    //result : map[string]interface{} 请阅读源码
+	var po1 = []*DeviceOauthLogPo1{}
+	var po1Join = [][]string{
+		{"INNER","test1 b","b.id = a.r_id"},
 	}
+	var pageListInfo = PageHelper.GetPageLists(&po1,"test","a.*,b.title","a.id","a",PageHelper.ConditionJoin(po1Join),"","a.id DESC",0,2)
+	fmt.Printf("\r\n total_page : %d \r\n",pageListInfo["total_page"])
+	fmt.Printf("\r\n curr_page : %d \r\n",pageListInfo["curr_page"])
+	fmt.Printf("\r\n page_rows : %d \r\n",pageListInfo["page_rows"])
+	fmt.Printf("\r\n total_record : %d \r\n",pageListInfo["total_record"])
+	for _,row := range po1{
+		fmt.Printf("\r\n relation_title : %s \r\n",row.Title)
+	}
+
 
 	fmt.Print("\r\n ========== condition Build \r\n")
 
@@ -58,5 +76,14 @@ func main() {
 	inCodi["title"] = "Bill"
 	condi["AND"] = inCodi
 	condi["LIKE"] = like
-	fmt.Print(ListHelper.ConditionBuild(condi))
+	fmt.Print(PageHelper.ConditionBuild(condi))
+
+	//join build , -- join生成器
+	var data = [][]string{
+		{"INNER","b b","b.id = a.id"},
+		{"INNER","c c","c.id = b.id"},
+	}
+
+	fmt.Print("\r\n ========== Join Conditon Build \r\n")
+	fmt.Print(PageHelper.ConditionJoin(data))
 }

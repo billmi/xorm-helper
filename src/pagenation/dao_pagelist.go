@@ -34,18 +34,20 @@ func (DaoBase *DaoBase) SetDatasource(datasource *xorm.Engine) {
 	分页
 	注意 ： 连接需要传入datasource
  */
-func (DaoBase *DaoBase) GetPageLists(po interface{}, table string, pk string, condition string, order string, page int, listRow int) map[string]interface{} {
+func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string ,pk string, alias string,join string,condition string, order string, page int, listRow int) map[string]interface{} {
 	var _fields = "*"
 	var _page = 0
 	var _order = ""
 	var orderCmd = " ORDER BY "
 	var _pk = "`id`"
 	var count = 0
+	var _listRow = LIST_ROWS
 	if pk == "" {
 		_pk = pk
 	}
-	var querySql = fmt.Sprintf("SELECT %s FROM %s WHERE 1 ", _fields, table)
-	var countSql = fmt.Sprintf("SELECT count(%s) AS count FROM %s WHERE 1 ", pk, table)
+	if fields != ""{
+		_fields = fields
+	}
 	var condi = " "
 	if condition != "" {
 		condi = condition
@@ -55,15 +57,19 @@ func (DaoBase *DaoBase) GetPageLists(po interface{}, table string, pk string, co
 	} else {
 		_order += orderCmd + _pk + " " + " DESC "
 	}
-
 	if page >= 0 {
 		_page = page
 	}
+	if listRow > 0{
+		_listRow = listRow
+	}
+	var querySql = fmt.Sprintf("SELECT %s FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", _fields, table)
+	var countSql = fmt.Sprintf("SELECT count(%s) AS count FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", pk, table)
 	querySql = querySql + condi + _order
 	countSql = countSql + condi
 	var handler = DaoBase.GetDatasource()
 	countRes, _ := handler.QueryString(countSql)
-	handler.SQL(QueryBuild(querySql, _page, true)).Find(po)
+	handler.SQL(QueryBuild(querySql, _page, _listRow,true)).Find(po)
 	var resData = make(map[string]interface{}, 0)
 	count, _ = strconv.Atoi(countRes[0]["count"])
 	if count > 0 {
@@ -108,6 +114,49 @@ func (DaoBase *DaoBase) GetLists(po interface{}, table string, pk string, condit
 	resData["list"] = po
 	return resData
 }
+
+
+
+/**
+	测试用例
+	var data = [][]string{
+		{"INNER","b b","b.id = a.id"},
+		{"INNER","c c","c.id = b.id"},
+	}
+	var base = &DaoBase{}
+	fmt.Print(base.ConditionJoin(data))
+
+	Join 条件生成器
+	authro : Bill
+ */
+func (DaoBase *DaoBase) ConditionJoin(join [][]string) string{
+	var _join = ""
+	var (
+		_innerFlag = "INNER"
+		_leftFlag =  "LEFT"
+		_rightFlag = "RIGHT"
+	)
+	var innerTpl = " INNER JOIN %s ON %s "
+	var leftTpl  = " LEFT JOIN %s ON %s "
+	var rightTpl  = " RIGHT JOIN %s ON %s "
+	for _, row := range join {
+		var in = strings.ToUpper(strings.TrimSpace(row[0]))
+		var table = row[1]
+		var condi = row[2]
+		switch in {
+			case _innerFlag:
+				_join += fmt.Sprintf(innerTpl,table,condi)
+			case _leftFlag:
+				_join += fmt.Sprintf(leftTpl,table,condi)
+			case _rightFlag:
+				_join += fmt.Sprintf(rightTpl,table,condi)
+			default:
+				_join += fmt.Sprintf(innerTpl,table,condi)
+		}
+	}
+	return _join
+}
+
 
 /**
 	SqlBuildConditon : 测试用例
