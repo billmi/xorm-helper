@@ -83,7 +83,6 @@ func main() {
 		{"INNER","b b","b.id = a.id"},
 		{"INNER","c c","c.id = b.id"},
 	}
-
 	fmt.Print("\r\n ========== Join Conditon Build \r\n")
 	fmt.Print(PageHelper.ConditionJoin(data))
 }
