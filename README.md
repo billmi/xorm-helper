@@ -39,13 +39,14 @@ type DeviceOauthLogPo struct {
 	DeviceScreenHeight int    `json:"device_screen_height"`
 }
 
+//relation po test => test1
 type DeviceOauthLogPo1 struct {
 	DeviceType         int    `json:"device_type"`
 	DeviceTypeName     string `json:"device_type_name"`
 	DeviceTypeTitle    string `json:"device_type_title"`
 	DeviceScreenWidth  int    `json:"device_screen_width"`
 	DeviceScreenHeight int    `json:"device_screen_height"`
-	Title              string `json:"title"`
+	Title              string `json:"title"`          //test1 .title
 }
 
 func main() {
