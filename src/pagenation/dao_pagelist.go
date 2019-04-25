@@ -184,10 +184,10 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	)
 
 	var _condi = ""
-	var str = " AND ( `%s` = '%v' )"
-	var intCondi = " AND ( `%s` = %v )"
-	var _gtCondi = " AND ( `%s` > %v )"
-	var _ltCondi = " AND ( `%s` < %v )"
+	var str = " AND ( %s = '%v' )"
+	var intCondi = " AND ( %s = %v )"
+	var _gtCondi = " AND ( %s > %v )"
+	var _ltCondi = " AND ( %s < %v )"
 	var _currRel = ""
 	for _rela, v := range condi {
 		_currRel = strings.ToUpper(_rela)
@@ -201,7 +201,7 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 					_condi += fmt.Sprintf(intCondi, _field, _v)
 				}
 			case _likeFlag:
-				_condi += " AND ( `" + _field + "` LIKE '%" + _v.(string) + "%' )"
+				_condi += " AND ( " + _field + " LIKE '%" + _v.(string) + "%' )"
 			case _gtFlag:
 				_condi += fmt.Sprintf(_gtCondi, _field, _v)
 			case _ltFlag:
