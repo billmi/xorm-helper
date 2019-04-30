@@ -76,7 +76,9 @@ func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string 
 	countRes, _ := handler.QueryString(countSql)
 	handler.SQL(QueryBuild(querySql, _page, _listRow,true)).Find(po)
 	var resData = make(map[string]interface{}, 0)
-	count, _ = strconv.Atoi(countRes[0]["count"])
+	if len(countRes) > 0{
+		count, _ = strconv.Atoi(countRes[0]["count"])
+	}
 	if count > 0 {
 		resData["list"] = po
 	} else {
