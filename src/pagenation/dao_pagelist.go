@@ -34,11 +34,13 @@ func (DaoBase *DaoBase) SetDatasource(datasource *xorm.Engine) {
 	分页
 	注意 ： 连接需要传入datasource
  */
-func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string ,pk string, alias string,join string,condition string, order string, page int, listRow int) map[string]interface{} {
+func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string ,pk string, alias string,join string,condition string, order string,group string, page int, listRow int) map[string]interface{} {
 	var _fields = "*"
 	var _page = 0
 	var _order = ""
 	var orderCmd = " ORDER BY "
+	var groupBy  = " GROUP BY "
+	var _group   = ""
 	var _pk = "`id`"
 	var count = 0
 	var _listRow = LIST_ROWS
@@ -57,6 +59,9 @@ func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string 
 	} else {
 		_order += orderCmd + _pk + " " + " DESC "
 	}
+	if group != ""{
+		_group = groupBy + group
+	}
 	if page >= 0 {
 		_page = page
 	}
@@ -65,8 +70,8 @@ func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string 
 	}
 	var querySql = fmt.Sprintf("SELECT %s FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", _fields, table)
 	var countSql = fmt.Sprintf("SELECT count(%s) AS count FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", pk, table)
-	querySql = querySql + condi + _order
-	countSql = countSql + condi
+	querySql = querySql + condi + _group + _order
+	countSql = countSql + condi + _group
 	var handler = DaoBase.GetDatasource()
 	countRes, _ := handler.QueryString(countSql)
 	handler.SQL(QueryBuild(querySql, _page, _listRow,true)).Find(po)
@@ -89,15 +94,17 @@ func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string 
 	不分页
 	注意 ： 连接需要传入datasource
  */
-func (DaoBase *DaoBase) GetLists(po interface{}, table string, pk string, condition string, order string) map[string]interface{} {
+func (DaoBase *DaoBase) GetLists(po interface{}, table string,fields string ,pk string,alias string,join string,condition string, order string,group string) map[string]interface{} {
 	var _fields = "*"
 	var _order = ""
 	var orderCmd = " ORDER BY "
+	var groupBy  = " GROUP BY "
+	var _group   = ""
 	var _pk = "`id`"
 	if pk == "" {
 		_pk = pk
 	}
-	var querySql = fmt.Sprintf("SELECT %s FROM %s WHERE 1 ", _fields, table)
+
 	var condi = " "
 	if condition != "" {
 		condi = condition
@@ -107,7 +114,11 @@ func (DaoBase *DaoBase) GetLists(po interface{}, table string, pk string, condit
 	} else {
 		_order += orderCmd + _pk + " " + " DESC "
 	}
-	querySql = querySql + condi + _order
+	if group != ""{
+		_group = groupBy + group
+	}
+	var querySql = fmt.Sprintf("SELECT %s FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", _fields, table)
+	querySql = querySql + condi + _group + _order
 	var handler = DaoBase.GetDatasource()
 	handler.SQL(querySql).Find(po)
 	var resData = make(map[string]interface{}, 0)

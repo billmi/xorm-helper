@@ -42,7 +42,7 @@ func main() {
 	var PageHelper = pagenation.DaoBase{}
 	PageHelper.SetDatasource(engine)
 	var po = []*DeviceOauthLogPo{}
-	PageHelper.GetLists(&po,"`test`","`id`","","`id` DESC")
+	PageHelper.GetLists(&po,"`test`","*","id","","","","`id` DESC","")
 	if len(po) > 0{
 		for _,row := range po{
 			fmt.Print(row.DeviceTypeName)
@@ -56,7 +56,7 @@ func main() {
 	var po1Join = [][]string{
 		{"INNER","test1 b","b.id = a.r_id"},
 	}
-	var pageListInfo = PageHelper.GetPageLists(&po1,"test","a.*,b.title","a.id","a",PageHelper.ConditionJoin(po1Join),"","a.id DESC",0,2)
+	var pageListInfo = PageHelper.GetPageLists(&po1,"test","a.*,b.title","a.id","a",PageHelper.ConditionJoin(po1Join),"","a.id DESC","",0,2)
 	fmt.Printf("\r\n total_page : %d \r\n",pageListInfo["total_page"])
 	fmt.Printf("\r\n curr_page : %d \r\n",pageListInfo["curr_page"])
 	fmt.Printf("\r\n page_rows : %d \r\n",pageListInfo["page_rows"])
