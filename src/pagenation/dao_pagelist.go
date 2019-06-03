@@ -176,11 +176,18 @@ func (DaoBase *DaoBase) ConditionJoin(join [][]string) string{
 		var condi = make(map[string]map[string]interface{})
 		var inCodi = make(map[string]interface{})
 		var like = make(map[string]interface{})
+		var null = make(map[string]interface{})        // null
+		var or = make(map[string]interface{},0)
+
+		orCondi["condi"]  = fmt.Sprintf("bc.status = %d",0)
+		nullCondi["bc.cv_id"] = nil
 		like["name"] = "Bill"
 		inCodi["type"] = 1
 		inCodi["title"] = "yang"
 		condi["AND"] = inCodi
 		condi["LIKE"] = like
+		condi["OR"] = or
+		condi["NULL"] = null
 		fmt.Print(ConditionBuild(condi))
 	author ： Bill
  */
@@ -194,6 +201,9 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 		_likeFlag = "LIKE"
 		_gtFlag   = "GT" //比较
 		_ltFlag   = "LT" //比较
+		_InFlag   = "IN" //比较
+		_nullFlag = "NULL" //为空
+		_orFlag   = "OR"   //或
 	)
 
 	var _condi = ""
@@ -201,11 +211,13 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	var intCondi = " AND ( %s = %v )"
 	var _gtCondi = " AND ( %s > %v )"
 	var _ltCondi = " AND ( %s < %v )"
+	var _InCondi = " AND ( %s IN (%s) )"
+	var _NullCondi = " AND ( ISNULL(%s) )"
+	var _orCondi = " OR ( %v )"
 	var _currRel = ""
 	for _rela, v := range condi {
 		_currRel = strings.ToUpper(_rela)
 		for _field, _v := range v {
-			fmt.Print(reflect.TypeOf(_v).String())
 			switch _currRel {
 			case _andFlag:
 				if reflect.TypeOf(_v).String() == "string" {
@@ -219,7 +231,14 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 				_condi += fmt.Sprintf(_gtCondi, _field, _v)
 			case _ltFlag:
 				_condi += fmt.Sprintf(_ltCondi, _field, _v)
+			case _InFlag:
+				_condi += fmt.Sprintf(_InCondi, _field, _v)
+			case _nullFlag:
+				_condi += fmt.Sprintf(_NullCondi, _field)
+			case _orFlag:
+				_condi += fmt.Sprintf(_orCondi, _v)
 			}
+
 		}
 	}
 	return _condi
