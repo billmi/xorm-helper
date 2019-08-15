@@ -243,3 +243,52 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	}
 	return _condi
 }
+
+func (DaoBase *DaoBase) GetByPo(po interface{},table string,condi string) interface{}{
+	var handler = DaoBase.GetDatasource()
+	handler.SQL(fmt.Sprintf("SELECT * FROM %s WHERE 1 " + condi,table)).Find(po)
+	return po
+}
+
+func (DaoBase *DaoBase) EditRow(table string,condi string,params map[string]interface{})int{
+	var handler = DaoBase.GetDatasource()
+	effRow,_ := handler.Table(table).Where(condi).Update(params)
+	return int(effRow)
+}
+
+func (DaoBase *DaoBase)InsertRow(table string,params map[string]interface{})(int,bool){
+	if len(params) == 0{
+		return 0,false
+	}
+	var (
+		sep = ","
+		valBuff = ""
+		_fields = make([]string,0)
+		_vals = make([]interface{},0)
+	)
+	for key,row := range params{
+		_fields = append(_fields,key )
+		_vals = append(_vals,row )
+	}
+	for _,row := range _vals{
+		var val = ""
+		if strings.Contains(reflect.TypeOf(row).String(),"string"){
+			val = fmt.Sprintf("'%v'",row)
+		}else{
+			val = fmt.Sprintf("%v",row)
+		}
+		valBuff += val + sep
+	}
+	var handler = DaoBase.GetDatasource()
+	sql := fmt.Sprintf("INSERT INTO %s(%s) VALUES(%s)",table,strings.Join(_fields,sep),strings.Trim(valBuff,sep))
+	res,err := handler.Exec(sql)
+	if err != nil{
+		return 0 ,false
+	}
+	nId,err := res.LastInsertId()
+	if err != nil{
+		return 0 ,false
+	}
+	return int(nId),true
+}
+
