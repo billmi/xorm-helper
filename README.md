@@ -2,15 +2,9 @@ baseFrom : go-xorm engine
 
 ##### 1. get xorm
 `
-go get -u -v github.com/go-xorm/xorm
+go get -u -v github.com/billmi/xorm-pagenation
 `
 
-#####  2. get mysql device
-`
-go get -u -v github.com/go-sql-driver/mysql
-`
-
-#####  3. import test.sql to database
 
 ##### MAIN
 
