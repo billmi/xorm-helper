@@ -15,3 +15,6 @@ go get -u -v github.com/billmi/xorm-pagenation
 | 连表分页查询                                    | [Pagenation](https://github.com/billmi/xorm-pagenation/blob/master/example/pagenation-list.go) | 结果必须关联Pojo-Struct           |
 | 不分页List                                      | [List-NoPagenation](https://github.com/billmi/xorm-pagenation/blob/master/example/list.go) | 结果必须关联Pojo-Struct           |
 
+ps : test.sql用来测试
+
+此项目初衷，不想把一些DB简单操作复杂化,做为一个扩展工具使用.
