@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"xorm-pagenation/pagenation"
+	"github.com/billmi/xorm-pagenation/pagenation"
 	"fmt"
 )
 
