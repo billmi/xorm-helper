@@ -244,18 +244,28 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	return _condi
 }
 
+/**
+	find by po Struct
+ */
 func (DaoBase *DaoBase) GetByPo(po interface{},table string,condi string) interface{}{
 	var handler = DaoBase.GetDatasource()
 	handler.SQL(fmt.Sprintf("SELECT * FROM %s WHERE 1 " + condi,table)).Find(po)
 	return po
 }
 
+/**
+	Return effect rows
+ */
 func (DaoBase *DaoBase) EditRow(table string,condi string,params map[string]interface{})int{
 	var handler = DaoBase.GetDatasource()
 	effRow,_ := handler.Table(table).Where(condi).Update(params)
 	return int(effRow)
 }
 
+
+/**
+	Return new InsertId
+ */
 func (DaoBase *DaoBase)InsertRow(table string,params map[string]interface{})(int,bool){
 	if len(params) == 0{
 		return 0,false
