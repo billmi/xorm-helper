@@ -1,4 +1,4 @@
-BaseFrom : go-xorm engine
+BaseFrom : [go-xorm](https://github.com/go-xorm/xorm)
 
 ## **Install**
 `
@@ -17,6 +17,5 @@ go get -u -v github.com/billmi/xorm-pagenation
 
 ps : test.sql用来测试
 
-此项目初衷，不想把一些DB简单操作复杂化,做为一个扩展工具使用:已简单实现联表等常用操作,一般很少用到的子查询或者复合查询,后期会继续更新.
+此项目初衷，不想把一些DB简单操作复杂化,做为一个扩展工具使用:已简单实现联表等常用操作,一般很少用到的子查询或者复合查询,后期会继续更新笔者保持以人人可以快速上手使用的心态,进行项目更新~
 
-笔者保持以人人可以快速上手使用的心态,进行项目更新~
