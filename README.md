@@ -1,4 +1,4 @@
-baseFrom : go-xorm engine
+BaseFrom : go-xorm engine
 
 ## **Install**
 `
@@ -13,5 +13,5 @@ go get -u -v github.com/billmi/xorm-pagenation
 | 实现xorm常规操作DB,使用map结构化,使用时参考demo | [Curd](https://github.com/billmi/xorm-pagenation/blob/master/example/curd.go) | 您也可以使用xorm提供的Builder生成 |
 | condition生成器                                 | [Condition](https://github.com/billmi/xorm-pagenation/blob/master/example/condition-build.go) | 使用时,请查看Demo                 |
 | 连表分页查询                                    | [Pagenation](https://github.com/billmi/xorm-pagenation/blob/master/example/pagenation-list.go) | 结果必须关联Pojo-Struct           |
-| 不分页List                                      | [List-NoPagenation](https://github.com/billmi/xorm-pagenation/blob/master/example/list.go) |                                   |
+| 不分页List                                      | [List-NoPagenation](https://github.com/billmi/xorm-pagenation/blob/master/example/list.go) | 结果必须关联Pojo-Struct           |
 
