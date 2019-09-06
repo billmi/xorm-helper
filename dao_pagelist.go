@@ -201,6 +201,8 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 		_InFlag   = "IN"   //比较
 		_nullFlag = "NULL" //为空
 		_orFlag   = "OR"   //或
+		_betweenFlag = "BETWEEN"
+		_expFlag     = "EXP"  //表达式
 	)
 
 	var _condi = ""
@@ -211,6 +213,8 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	var _InCondi = " AND ( %s IN (%s) )"
 	var _NullCondi = " AND ( ISNULL(%s) )"
 	var _orCondi = " OR ( %v )"
+	var _betweenCondi = " AND ( %s BETWEEN %s )" //采用自填入 BETWEEN start AND end
+	var _expCondi = " AND ( %s %s )" //自定义
 	var _currRel = ""
 	for _rela, v := range condi {
 		_currRel = strings.ToUpper(_rela)
@@ -234,6 +238,10 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 				_condi += fmt.Sprintf(_NullCondi, _field)
 			case _orFlag:
 				_condi += fmt.Sprintf(_orCondi, _v)
+			case _betweenFlag:
+				_condi += fmt.Sprintf(_betweenCondi, _field, _v)
+			case _expFlag:
+				_condi += fmt.Sprintf(_expCondi, _field, _v)
 			}
 
 		}
