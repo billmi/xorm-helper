@@ -34,20 +34,20 @@ func (DaoBase *DaoBase) SetDatasource(datasource *xorm.Engine) {
 	分页
 	注意 ： 连接需要传入datasource
  */
-func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string ,pk string, alias string,join string,condition string, order string,group string, page int, listRow int) map[string]interface{} {
+func (DaoBase *DaoBase) GetPageLists(po interface{}, table string, fields string, pk string, alias string, join string, condition string, order string, group string, page int, listRow int) map[string]interface{} {
 	var _fields = "*"
 	var _page = 0
 	var _order = ""
 	var orderCmd = " ORDER BY "
-	var groupBy  = " GROUP BY "
-	var _group   = ""
+	var groupBy = " GROUP BY "
+	var _group = ""
 	var _pk = "`id`"
 	var count = 0
 	var _listRow = LIST_ROWS
 	if pk == "" {
 		_pk = pk
 	}
-	if fields != ""{
+	if fields != "" {
 		_fields = fields
 	}
 	var condi = " "
@@ -59,24 +59,24 @@ func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string 
 	} else {
 		_order += orderCmd + _pk + " " + " DESC "
 	}
-	if group != ""{
+	if group != "" {
 		_group = groupBy + group
 	}
 	if page >= 0 {
 		_page = page
 	}
-	if listRow > 0{
+	if listRow > 0 {
 		_listRow = listRow
 	}
-	var querySql = fmt.Sprintf("SELECT %s FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", _fields, table)
-	var countSql = fmt.Sprintf("SELECT count(%s) AS count FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", pk, table)
+	var querySql = fmt.Sprintf("SELECT %s FROM %s "+" "+alias+" "+join+" WHERE 1 ", _fields, table)
+	var countSql = fmt.Sprintf("SELECT count(%s) AS count FROM %s "+" "+alias+" "+join+" WHERE 1 ", pk, table)
 	querySql = querySql + condi + _group + _order
 	countSql = countSql + condi + _group
 	var handler = DaoBase.GetDatasource()
 	countRes, _ := handler.QueryString(countSql)
-	handler.SQL(QueryBuild(querySql, _page, _listRow,true)).Find(po)
+	handler.SQL(QueryBuild(querySql, _page, _listRow, true)).Find(po)
 	var resData = make(map[string]interface{}, 0)
-	if len(countRes) > 0{
+	if len(countRes) > 0 {
 		count, _ = strconv.Atoi(countRes[0]["count"])
 	}
 	if count > 0 {
@@ -96,12 +96,12 @@ func (DaoBase *DaoBase) GetPageLists(po interface{}, table string,fields string 
 	不分页
 	注意 ： 连接需要传入datasource
  */
-func (DaoBase *DaoBase) GetLists(po interface{}, table string,fields string ,pk string,alias string,join string,condition string, order string,group string) map[string]interface{} {
+func (DaoBase *DaoBase) GetLists(po interface{}, table string, fields string, pk string, alias string, join string, condition string, order string, group string) map[string]interface{} {
 	var _fields = "*"
 	var _order = ""
 	var orderCmd = " ORDER BY "
-	var groupBy  = " GROUP BY "
-	var _group   = ""
+	var groupBy = " GROUP BY "
+	var _group = ""
 	var _pk = "`id`"
 	if pk == "" {
 		_pk = pk
@@ -116,10 +116,10 @@ func (DaoBase *DaoBase) GetLists(po interface{}, table string,fields string ,pk 
 	} else {
 		_order += orderCmd + _pk + " " + " DESC "
 	}
-	if group != ""{
+	if group != "" {
 		_group = groupBy + group
 	}
-	var querySql = fmt.Sprintf("SELECT %s FROM %s "+ " "+alias+" "+ join + " WHERE 1 ", _fields, table)
+	var querySql = fmt.Sprintf("SELECT %s FROM %s "+" "+alias+" "+join+" WHERE 1 ", _fields, table)
 	querySql = querySql + condi + _group + _order
 	var handler = DaoBase.GetDatasource()
 	handler.SQL(querySql).Find(po)
@@ -127,8 +127,6 @@ func (DaoBase *DaoBase) GetLists(po interface{}, table string,fields string ,pk 
 	resData["list"] = po
 	return resData
 }
-
-
 
 /**
 	测试用例
@@ -142,34 +140,33 @@ func (DaoBase *DaoBase) GetLists(po interface{}, table string,fields string ,pk 
 	Join 条件生成器
 	authro : Bill
  */
-func (DaoBase *DaoBase) ConditionJoin(join [][]string) string{
+func (DaoBase *DaoBase) ConditionJoin(join [][]string) string {
 	var _join = ""
 	var (
 		_innerFlag = "INNER"
-		_leftFlag =  "LEFT"
+		_leftFlag  = "LEFT"
 		_rightFlag = "RIGHT"
 	)
 	var innerTpl = " INNER JOIN %s ON %s "
-	var leftTpl  = " LEFT JOIN %s ON %s "
-	var rightTpl  = " RIGHT JOIN %s ON %s "
+	var leftTpl = " LEFT JOIN %s ON %s "
+	var rightTpl = " RIGHT JOIN %s ON %s "
 	for _, row := range join {
 		var in = strings.ToUpper(strings.TrimSpace(row[0]))
 		var table = row[1]
 		var condi = row[2]
 		switch in {
-			case _innerFlag:
-				_join += fmt.Sprintf(innerTpl,table,condi)
-			case _leftFlag:
-				_join += fmt.Sprintf(leftTpl,table,condi)
-			case _rightFlag:
-				_join += fmt.Sprintf(rightTpl,table,condi)
-			default:
-				_join += fmt.Sprintf(innerTpl,table,condi)
+		case _innerFlag:
+			_join += fmt.Sprintf(innerTpl, table, condi)
+		case _leftFlag:
+			_join += fmt.Sprintf(leftTpl, table, condi)
+		case _rightFlag:
+			_join += fmt.Sprintf(rightTpl, table, condi)
+		default:
+			_join += fmt.Sprintf(innerTpl, table, condi)
 		}
 	}
 	return _join
 }
-
 
 /**
 	SqlBuildConditon : 测试用例
@@ -199,9 +196,9 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	var (
 		_andFlag  = "AND"
 		_likeFlag = "LIKE"
-		_gtFlag   = "GT" //比较
-		_ltFlag   = "LT" //比较
-		_InFlag   = "IN" //比较
+		_gtFlag   = "GT"   //比较
+		_ltFlag   = "LT"   //比较
+		_InFlag   = "IN"   //比较
 		_nullFlag = "NULL" //为空
 		_orFlag   = "OR"   //或
 	)
@@ -247,58 +244,56 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 /**
 	find by po Struct
  */
-func (DaoBase *DaoBase) GetByPo(po interface{},table string,condi string) interface{}{
+func (DaoBase *DaoBase) GetByPo(po interface{}, table string, condi string) interface{} {
 	var handler = DaoBase.GetDatasource()
-	handler.SQL(fmt.Sprintf("SELECT * FROM %s WHERE 1 " + condi,table)).Find(po)
+	handler.SQL("SELECT * FROM " + table + " WHERE 1 " + condi).Find(po)
 	return po
 }
 
 /**
 	Return effect rows
  */
-func (DaoBase *DaoBase) EditRow(table string,condi string,params map[string]interface{})int{
+func (DaoBase *DaoBase) EditRow(table string, condi string, params map[string]interface{}) int {
 	var handler = DaoBase.GetDatasource()
-	effRow,_ := handler.Table(table).Where(condi).Update(params)
+	effRow, _ := handler.Table(table).Where(condi).Update(params)
 	return int(effRow)
 }
-
 
 /**
 	Return new InsertId
  */
-func (DaoBase *DaoBase)InsertRow(table string,params map[string]interface{})(int,bool){
-	if len(params) == 0{
-		return 0,false
+func (DaoBase *DaoBase) InsertRow(table string, params map[string]interface{}) (int, bool) {
+	if len(params) == 0 {
+		return 0, false
 	}
 	var (
-		sep = ","
+		sep     = ","
 		valBuff = ""
-		_fields = make([]string,0)
-		_vals = make([]interface{},0)
+		_fields = make([]string, 0)
+		_vals   = make([]interface{}, 0)
 	)
-	for key,row := range params{
-		_fields = append(_fields,key )
-		_vals = append(_vals,row )
+	for key, row := range params {
+		_fields = append(_fields, key)
+		_vals = append(_vals, row)
 	}
-	for _,row := range _vals{
+	for _, row := range _vals {
 		var val = ""
-		if strings.Contains(reflect.TypeOf(row).String(),"string"){
-			val = fmt.Sprintf("'%v'",row)
-		}else{
-			val = fmt.Sprintf("%v",row)
+		if strings.Contains(reflect.TypeOf(row).String(), "string") {
+			val = fmt.Sprintf("'%v'", row)
+		} else {
+			val = fmt.Sprintf("%v", row)
 		}
 		valBuff += val + sep
 	}
 	var handler = DaoBase.GetDatasource()
-	sql := fmt.Sprintf("INSERT INTO %s(%s) VALUES(%s)",table,strings.Join(_fields,sep),strings.Trim(valBuff,sep))
-	res,err := handler.Exec(sql)
-	if err != nil{
-		return 0 ,false
+	sql := fmt.Sprintf("INSERT INTO %s(%s) VALUES(%s)", table, strings.Join(_fields, sep), strings.Trim(valBuff, sep))
+	res, err := handler.Exec(sql)
+	if err != nil {
+		return 0, false
 	}
-	nId,err := res.LastInsertId()
-	if err != nil{
-		return 0 ,false
+	nId, err := res.LastInsertId()
+	if err != nil {
+		return 0, false
 	}
-	return int(nId),true
+	return int(nId), true
 }
-
