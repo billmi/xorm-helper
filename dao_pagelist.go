@@ -267,8 +267,8 @@ func (DaoBase *DaoBase) EditRow(table string, condi string, params map[string]in
 	if err != nil {
 		return 0
 	}
-	//Fill Speed Too fast && Succ  => err == nil , The Res is 0,
-	if effRow == 0 && err == nil {
+	//Because update too fast,
+	if effRow == 0 && err == nil { // Succ && err == nil , The Res is 0 set to 1,
 		effRow = 1
 	}
 	return int(effRow)
