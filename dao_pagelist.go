@@ -263,7 +263,10 @@ func (DaoBase *DaoBase) GetByPo(po interface{}, table string, condi string) inte
  */
 func (DaoBase *DaoBase) EditRow(table string, condi string, params map[string]interface{}) int {
 	var handler = DaoBase.GetDatasource()
-	effRow, _ := handler.Table(table).Where(condi).Update(params)
+	effRow, err := handler.Table(table).Where(condi).Update(params)
+	if err != nil{
+		return 0
+	}
 	return int(effRow)
 }
 
