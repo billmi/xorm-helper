@@ -194,15 +194,15 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	}
 	//flag部分
 	var (
-		_andFlag  = "AND"
-		_likeFlag = "LIKE"
-		_gtFlag   = "GT"   //比较
-		_ltFlag   = "LT"   //比较
-		_InFlag   = "IN"   //比较
-		_nullFlag = "NULL" //为空
-		_orFlag   = "OR"   //或
+		_andFlag     = "AND"
+		_likeFlag    = "LIKE"
+		_gtFlag      = "GT"   //比较
+		_ltFlag      = "LT"   //比较
+		_InFlag      = "IN"   //比较
+		_nullFlag    = "NULL" //为空
+		_orFlag      = "OR"   //或
 		_betweenFlag = "BETWEEN"
-		_expFlag     = "EXP"  //表达式
+		_expFlag     = "EXP" //表达式
 	)
 
 	var _condi = ""
@@ -214,7 +214,7 @@ func (DaoBase *DaoBase) ConditionBuild(condi map[string]map[string]interface{}) 
 	var _NullCondi = " AND ( ISNULL(%s) )"
 	var _orCondi = " OR ( %v )"
 	var _betweenCondi = " AND ( %s BETWEEN %s )" //采用自填入 BETWEEN start AND end
-	var _expCondi = " AND ( %s %s )" //自定义
+	var _expCondi = " AND ( %s %s )"             //自定义
 	var _currRel = ""
 	for _rela, v := range condi {
 		_currRel = strings.ToUpper(_rela)
@@ -264,8 +264,12 @@ func (DaoBase *DaoBase) GetByPo(po interface{}, table string, condi string) inte
 func (DaoBase *DaoBase) EditRow(table string, condi string, params map[string]interface{}) int {
 	var handler = DaoBase.GetDatasource()
 	effRow, err := handler.Table(table).Where(condi).Update(params)
-	if err != nil{
+	if err != nil {
 		return 0
+	}
+	//Fill Speed Too fast && Succ  => err == nil , The Res is 0,
+	if effRow == 0 && err == nil {
+		effRow = 1
 	}
 	return int(effRow)
 }
