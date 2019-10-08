@@ -3,7 +3,7 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"github.com/billmi/xorm-pagenation/pagenation"
+	"github.com/billmi/xorm-pagenation"
 	"fmt"
 )
 
@@ -52,9 +52,9 @@ func main() {
 		//if no condition can be set empty string  => ""
 		condition = ""
 
-		page      = 1  //default
+		page = 1 //default
 
-		listRow   = 15 //default
+		listRow = 15 //default
 
 		group     = ""
 		order     = "a.id DESC"
