@@ -312,3 +312,9 @@ func (DaoBase *DaoBase) InsertRow(table string, params map[string]interface{}) (
 	}
 	return int(nId), true
 }
+
+//开启事务 获取session stat
+func (DaoBase *DaoBase) StartTransaction() *xorm.Session {
+	var handler = DaoBase.GetDatasource()
+	return handler.NewSession()
+}
