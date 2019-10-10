@@ -6,6 +6,7 @@ import (
 	"github.com/billmi/xorm-pagenation"
 	"fmt"
 	"time"
+	"github.com/lunny/log"
 )
 
 func main() {
@@ -44,4 +45,19 @@ func main() {
 	//Edit
 	condi := fmt.Sprintf("id = %d ", 1)
 	PageHelper.EditRow(tableName, condi, editData)
+
+	/*
+		Search base on XormEngine
+		The demo : Only example!
+	*/
+	var _model = XXModel{}
+	has,err := engine.Where(condi).Get(&_model)
+	if err != nil{
+		log.Error(err.Error())
+	}
+	if has{
+		fmt.Print(_model)
+	}else{
+		fmt.Print("Not Find !")
+	}
 }
