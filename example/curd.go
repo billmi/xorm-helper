@@ -49,6 +49,7 @@ func main() {
 	/*
 		Search base on XormEngine
 		The demo : Only Demo
+		You can create the model by reverse.
 	*/
 	var _model = XXModel{}
 	has, err := engine.Where(condi).Get(&_model)

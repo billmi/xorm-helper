@@ -15,7 +15,7 @@ func main() {
 
 	var XormHelper = xormhelper.XormHelper{}
 
-	//condition Build  后面可以自己扩展
+	//condition Build
 	var (
 		_condi = make(map[string]map[string]interface{}, 0)
 	)
@@ -60,7 +60,7 @@ func main() {
 	fmt.Print(XormHelper.ConditionBuild(_condi))
 	fmt.Print("\r\n ========== Conditon Build \r\n")
 
-	//join build , -- join生成器
+	//join build , -- join
 	var joinDemo = [][]string{
 		{"LEFT", "b b", "b.id = a.id"},
 		{"INNER", "c c", "c.id = b.id"},
