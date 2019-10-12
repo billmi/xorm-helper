@@ -5,6 +5,7 @@ import (
 	"github.com/go-xorm/xorm"
 	"github.com/billmi/xorm-pagenation"
 	"fmt"
+	"github.com/billmi/xorm-helper"
 )
 
 func main() {
@@ -15,10 +16,10 @@ func main() {
 	if err != nil {
 		fmt.Print(err.Error())
 	}
-	var PageHelper = pagenation.DaoBase{}
+	var XormHelper = xormhelper.XormHelper{}
 
 	//Set xorm engine
-	PageHelper.SetDatasource(engine)
+	XormHelper.SetDatasource(engine)
 
 
 }

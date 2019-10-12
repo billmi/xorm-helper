@@ -3,7 +3,7 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"github.com/billmi/xorm-pagenation/pagenation"
+	"github.com/billmi/xorm-helper"
 	"fmt"
 )
 
@@ -19,14 +19,14 @@ func main() {
 	if err != nil {
 		fmt.Print(err.Error())
 	}
-	var PageHelper = pagenation.DaoBase{}
+	var XormHelper = xormhelper.XormHelper{}
 
 	//Set xorm engine
-	PageHelper.SetDatasource(engine)
+	XormHelper.SetDatasource(engine)
 
 	//Use Data po struct
 	var po = []DeviceOauthLogPo{}
-	PageHelper.GetLists(&po, "`test`", "*", "id", "", "", "", "`id` DESC", "")
+	XormHelper.GetLists(&po, "`test`", "*", "id", "", "", "", "`id` DESC", "")
 	if len(po) > 0 {
 		for _, row := range po {
 			fmt.Print(row.DeviceTypeName)

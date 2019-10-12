@@ -3,10 +3,10 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"github.com/billmi/xorm-pagenation"
+	"github.com/billmi/xorm-helper"
 	"fmt"
 	"time"
-	"github.com/lunny/log"
+	"log"
 )
 
 func main() {
@@ -17,10 +17,10 @@ func main() {
 	if err != nil {
 		fmt.Print(err.Error())
 	}
-	var PageHelper = pagenation.DaoBase{}
+	var XormHelper = xormhelper.XormHelper{}
 
 	//Set xorm engine
-	PageHelper.SetDatasource(engine)
+	XormHelper.SetDatasource(engine)
 
 	var (
 		tableName  = "test"
@@ -40,24 +40,24 @@ func main() {
 		}
 	)
 	//insert
-	PageHelper.InsertRow(tableName, inSertData)
+	XormHelper.InsertRow(tableName, inSertData)
 
 	//Edit
 	condi := fmt.Sprintf("id = %d ", 1)
-	PageHelper.EditRow(tableName, condi, editData)
+	XormHelper.EditRow(tableName, condi, editData)
 
 	/*
 		Search base on XormEngine
-		The demo : Only example!
+		The demo : Only Demo
 	*/
 	var _model = XXModel{}
-	has,err := engine.Where(condi).Get(&_model)
-	if err != nil{
-		log.Error(err.Error())
+	has, err := engine.Where(condi).Get(&_model)
+	if err != nil {
+		log.Fatal(err.Error())
 	}
-	if has{
+	if has {
 		fmt.Print(_model)
-	}else{
+	} else {
 		fmt.Print("Not Find !")
 	}
 }

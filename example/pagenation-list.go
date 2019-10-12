@@ -5,6 +5,7 @@ import (
 	"github.com/go-xorm/xorm"
 	"github.com/billmi/xorm-pagenation"
 	"fmt"
+	"github.com/billmi/xorm-helper"
 )
 
 /**
@@ -39,7 +40,7 @@ func main() {
 		fmt.Print(err.Error())
 	}
 	var (
-		PageHelper = pagenation.DaoBase{}
+		XormHelper = xormhelper.XormHelper{}
 
 		//Use Data po struct
 		po = []*DeviceOauthLogPo1{}
@@ -67,9 +68,9 @@ func main() {
 	)
 
 	//Set xorm engine
-	PageHelper.SetDatasource(engine)
+	XormHelper.SetDatasource(engine)
 
-	pageListInfo := PageHelper.GetPageLists(&po, tableName, fields, pk, alias, PageHelper.ConditionJoin(po1Join), condition, order, group, page, listRow)
+	pageListInfo := XormHelper.GetPageLists(&po, tableName, fields, pk, alias, XormHelper.ConditionJoin(po1Join), condition, order, group, page, listRow)
 
 	//Can Get PageInfo
 	fmt.Printf("\r\n total_page : %d \r\n", pageListInfo["total_page"])

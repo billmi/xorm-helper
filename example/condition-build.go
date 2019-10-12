@@ -2,8 +2,8 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/billmi/xorm-pagenation"
 	"fmt"
+	"github.com/billmi/xorm-helper"
 )
 
 /**
@@ -13,7 +13,7 @@ import (
 
 func main() {
 
-	var PageHelper = pagenation.DaoBase{}
+	var XormHelper = xormhelper.XormHelper{}
 
 	//condition Build  后面可以自己扩展
 	var (
@@ -57,7 +57,7 @@ func main() {
 	}
 
 	fmt.Print("\r\n ========== Conditon Build \r\n")
-	fmt.Print(PageHelper.ConditionBuild(_condi))
+	fmt.Print(XormHelper.ConditionBuild(_condi))
 	fmt.Print("\r\n ========== Conditon Build \r\n")
 
 	//join build , -- join生成器
@@ -67,5 +67,5 @@ func main() {
 		{"RIGHT", "c c", "c.id = b.id"},
 	}
 	fmt.Print("\r\n ========== Join Conditon Build \r\n")
-	fmt.Print(PageHelper.ConditionJoin(joinDemo))
+	fmt.Print(XormHelper.ConditionJoin(joinDemo))
 }
