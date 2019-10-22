@@ -6,6 +6,7 @@ import (
 	"strings"
 	"github.com/go-xorm/xorm"
 	"strconv"
+	"sort"
 )
 
 /**
@@ -191,9 +192,16 @@ func (xormhelper *XormHelper) ConditionBuild(condi map[string]map[string]interfa
 	if len(condi) == 0 {
 		return ""
 	}
-	for _rela, v := range condi {
-		_currRel = strings.ToUpper(_rela)
-		for _field, _v := range v {
+	var (
+		tips []string
+	)
+	for k := range condi {
+		tips = append(tips, k)
+	}
+	sort.Strings(tips)
+	for _, tip := range tips {
+		_currRel = strings.ToUpper(tip)
+		for _field, _v := range condi[tip] {
 			switch _currRel {
 			case _andFlag:
 				if reflect.TypeOf(_v).String() == "string" {
