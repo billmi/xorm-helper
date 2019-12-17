@@ -50,7 +50,7 @@ func (xormhelper *XormHelper) GetPageLists(po interface{}, table string, fields 
 		resData = make(map[string]interface{}, 0)
 		pageInfo = make(map[string]int,0)
 	)
-	if pk == "" {
+	if pk != "" {
 		_pk = pk
 	}
 	if fields != "" {
@@ -75,7 +75,7 @@ func (xormhelper *XormHelper) GetPageLists(po interface{}, table string, fields 
 		_listRow = listRow
 	}
 	querySql = fmt.Sprintf("SELECT %s FROM %s "+" "+alias+" "+join+" WHERE 1 ", _fields, table)
-	countSql = fmt.Sprintf("SELECT count(%s) AS count FROM %s "+" "+alias+" "+join+" WHERE 1 ", pk, table)
+	countSql = fmt.Sprintf("SELECT count(%s) AS count FROM %s "+" "+alias+" "+join+" WHERE 1 ", _pk, table)
 	querySql = querySql + condi + _group + _order
 	countSql = countSql + condi + _group
 	var handler = xormhelper.GetDatasource()
@@ -111,7 +111,7 @@ func (xormhelper *XormHelper) GetLists(po interface{}, table string, fields stri
 		querySql string
 		resData = make(map[string]interface{}, 0)
 	)
-	if pk == "" {
+	if pk != "" {
 		_pk = pk
 	}
 
