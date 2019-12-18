@@ -7,6 +7,8 @@ import (
 	"fmt"
 )
 
+//参考 pagenation-list.go
+
 func main() {
 
 	engine, err := xorm.NewEngine("mysql",
@@ -19,6 +21,5 @@ func main() {
 
 	//Set xorm engine
 	XormHelper.SetDatasource(engine)
-
 
 }
