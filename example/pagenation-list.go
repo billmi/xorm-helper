@@ -3,7 +3,6 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"github.com/billmi/xorm-pagenation"
 	"fmt"
 	"github.com/billmi/xorm-helper"
 )
