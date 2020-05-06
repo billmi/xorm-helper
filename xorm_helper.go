@@ -210,7 +210,7 @@ func (xormhelper *XormHelper) ConditionBuild(condi map[string]map[string]interfa
 					_condi += fmt.Sprintf(intCondi, _field, _v)
 				}
 			case _likeFlag:
-				_condi += " AND ( " + _field + " LIKE '%" + _v.(string) + "%' )"
+				_condi += ` AND ( ` + _field + ` LIKE  "%` + _v.(string) + `%" )`
 			case _gtFlag:
 				_condi += fmt.Sprintf(_gtCondi, _field, _v)
 			case _ltFlag:
