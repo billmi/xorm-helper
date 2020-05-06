@@ -27,8 +27,8 @@ func (xormhelper *XormHelper) GetDatasource() *xorm.Engine {
 /**
 	SetDatasource
  */
-func (DaoBase *XormHelper) SetDatasource(datasource *xorm.Engine) {
-	DaoBase.Datasource = datasource
+func (xormhelper *XormHelper) SetDatasource(datasource *xorm.Engine) {
+	xormhelper.Datasource = datasource
 }
 
 /**
